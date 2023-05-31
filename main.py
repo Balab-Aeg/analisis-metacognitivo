@@ -37,7 +37,7 @@ def index():
     cursor.close()
     conn.close()
 
-    #LIMPIAR FRASES
+    #FUNCION PARA LIMPIAR FRASES
     def clean_string(text):
         if text == "nan":
             return ""
