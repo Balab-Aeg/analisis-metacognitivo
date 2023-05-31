@@ -37,7 +37,7 @@ def index():
     cursor.close()
     conn.close()
 
-    #FUNCION PARA LIMPIAR FRASES
+    #LIMPIAR FRASES
     def clean_string(text):
         if text == "nan":
             return ""
@@ -111,20 +111,20 @@ def index():
     cleaned = list(map(clean_string, person_objetives))
     embeddings = modelS.encode(cleaned)
     aut = []
-    for idx,answer in enumerate(embeddings[:-1]):
+    for idx,answer in enumerate(cleaned[:-1]):
         aut.append(cosine_similarity([embeddings[-1]],[embeddings[idx]]))
-    obj_similarities = []
+    similarities1 = []
     for answer in aut:
-        obj_similarities.append(float(answer[0][0]))
+        similarities1.append(float(answer[0][0]))
 
-    index = [*range(0,len(obj_similarities),1)]
+    index = [*range(0,len(similarities1),1)]
 
-    chart_objetives = pd.DataFrame({
+    chart_objetives1 = pd.DataFrame({
         'x':index,
-        'y':obj_similarities
+        'y':similarities1
     }
     )
-    o = alt.Chart(chart_objetives).mark_area().encode(
+    o1 = alt.Chart(chart_objetives1).mark_area().encode(
         x=alt.X('x', title="Semanas"),
         y=alt.Y('y', title=""),
         color=alt.value("#3399ff")
@@ -133,14 +133,14 @@ def index():
     person_objetives.pop()
 
     #DIFICULTADES
-    difficulties = []
-    cleanedD = list(map(clean_string, person_difficulties))
-    for idx,answer in enumerate(cleanedD):
-        encoded_text = tokenizer(answer, return_tensors='pt')
-        output = model(**encoded_text)
-        scores = output[0][0].detach().numpy()
-        scores = softmax(scores)
-        difficulties.append(scores)
+    difficulties1 = []
+    cleanedD1 = list(map(clean_string, person_difficulties))
+    for idx,answer in enumerate(cleanedD1):
+        encoded_text1 = tokenizer(answer, return_tensors='pt')
+        output1 = model(**encoded_text1)
+        scores1 = output1[0][0].detach().numpy()
+        scores1 = softmax(scores1)
+        difficulties1.append(scores1)
 
     color_scale = alt.Scale(
         domain=[
@@ -158,11 +158,11 @@ def index():
         minExtent=60,
         domain=False
     )
-    source = []
+    source1 = []
 
-    for idx,d in enumerate(difficulties):
+    for idx,d in enumerate(difficulties1):
         start,end = -d[1]/2,d[1]/2
-        source.append(
+        source1.append(
             {
                 "question":idx+1,
                 "type":"neutral",
@@ -171,7 +171,7 @@ def index():
                 "end":end
             }
         )
-        source.append(
+        source1.append(
             {
                 "question":idx+1,
                 "type":"negativo",
@@ -180,7 +180,7 @@ def index():
                 "end":start-d[0]
             }
         )
-        source.append(
+        source1.append(
             {
                 "question":idx+1,
                 "type":"positivo",
@@ -191,10 +191,10 @@ def index():
         )
         
 
-    source = alt.pd.DataFrame(source)
+    source1 = alt.pd.DataFrame(source1)
 
 
-    d = alt.Chart(source).mark_bar().encode(
+    d1 = alt.Chart(source1).mark_bar().encode(
         x=alt.X('start:Q', title=""),
         x2='end:Q',
         y=alt.Y('question:N', axis=y_axis),
@@ -206,20 +206,20 @@ def index():
     ).to_json()
 
     #UTILIDAD
-    utilities = []
-    cleanedU = list(map(clean_string, person_utilities))
-    for idx,answer in enumerate(cleanedU):
-        encoded_text = tokenizer(answer, return_tensors='pt')
-        output = model(**encoded_text)
-        scores = output[0][0].detach().numpy()
-        scores = softmax(scores)
-        utilities.append(scores)
+    utilities1 = []
+    cleanedU1 = list(map(clean_string, person_utilities))
+    for idx,answer in enumerate(cleanedU1):
+        encoded_text1 = tokenizer(answer, return_tensors='pt')
+        output1 = model(**encoded_text1)
+        scores1 = output1[0][0].detach().numpy()
+        scores1 = softmax(scores1)
+        utilities1.append(scores1)
 
-    source = []
+    source2 = []
 
-    for idx,d in enumerate(utilities):
+    for idx,d in enumerate(utilities1):
         start,end = -d[1]/2,d[1]/2
-        source.append(
+        source2.append(
             {
                 "question":idx+1,
                 "type":"neutral",
@@ -228,7 +228,7 @@ def index():
                 "end":end
             }
         )
-        source.append(
+        source2.append(
             {
                 "question":idx+1,
                 "type":"negativo",
@@ -237,7 +237,7 @@ def index():
                 "end":start-d[0]
             }
         )
-        source.append(
+        source2.append(
             {
                 "question":idx+1,
                 "type":"positivo",
@@ -248,10 +248,10 @@ def index():
         )
         
 
-    source = alt.pd.DataFrame(source)
+    source2 = alt.pd.DataFrame(source2)
 
 
-    u = alt.Chart(source).mark_bar().encode(
+    u1 = alt.Chart(source2).mark_bar().encode(
         x=alt.X('start:Q', title=""),
         x2='end:Q',
         y=alt.Y('question:N', axis=y_axis),
@@ -263,25 +263,24 @@ def index():
     ).to_json()
 
     #AUTONOMIA
-    
     person_all_text.append(autonomia)
-    cleanedA = list(map(clean_string, person_all_text))
-    embeddings = modelS.encode(cleanedA)
+    cleaned1 = list(map(clean_string, person_all_text))
+    embeddings = modelS.encode(person_all_text)
     aut = []
-    for idx,answer in enumerate(embeddings[:-1]):
+    for idx,answer in enumerate(person_all_text[:-1]):
         aut.append(cosine_similarity([embeddings[-1]],[embeddings[idx]]))
-    aut_similarities = []
+    aut_similarities1 = []
     for answer in aut:
-        aut_similarities.append(float(answer[0][0]))
+        aut_similarities1.append(float(answer[0][0]))
 
-    index = [*range(0,len(aut_similarities),1)]
+    index = [*range(0,len(aut_similarities1),1)]
 
-    chart_autonomia = pd.DataFrame({
+    chart_autonomia1 = pd.DataFrame({
         'x':index,
-        'y':aut_similarities
+        'y':aut_similarities1
     })
 
-    a = alt.Chart(chart_autonomia).mark_area().encode(
+    a1 = alt.Chart(chart_autonomia1).mark_area().encode(
         x=alt.X('x', title="Semanas"),
         y=alt.Y('y', title="Nivel de autonomía (0-1)"),
         color=alt.value("#ff6600")
@@ -292,21 +291,21 @@ def index():
     #PARTICIPACION
 
     person_all_text.append(participacion)
-    cleanedP = list(map(clean_string, person_all_text))
-    embeddings = modelS.encode(cleanedP)
+    cleaned1 = list(map(clean_string, person_all_text))
+    embeddings = modelS.encode(cleaned1)
     par = []
-    for idx,answer in enumerate(embeddings[:-1]):
+    for idx,answer in enumerate(cleaned1[:-1]):
         par.append(cosine_similarity([embeddings[-1]],[embeddings[idx]]))
-    par_similarities = []
+    par_similarities1 = []
     for answer in par:
-        par_similarities.append(float(answer[0][0]))
+        par_similarities1.append(float(answer[0][0]))
 
-    chart_participacion =  pd.DataFrame({
+    chart_participacion1 =  pd.DataFrame({
         'x':index,
-        'y':par_similarities
+        'y':par_similarities1
     })
 
-    p = alt.Chart(chart_participacion).mark_area().encode(
+    p1 = alt.Chart(chart_participacion1).mark_area().encode(
         x=alt.X('x', title="Semanas"),
         y=alt.Y('y', title="Nivel de participación (0-1)"),
         color=alt.value("#33cc33")
@@ -317,21 +316,21 @@ def index():
     #COMPROMISO
 
     person_all_text.append(compromiso)
-    cleanedC = list(map(clean_string, person_all_text))
-    embeddings = modelS.encode(cleanedC)
+    cleaned1 = list(map(clean_string, person_all_text))
+    embeddings = modelS.encode(cleaned1)
     com = []
-    for idx,answer in enumerate(embeddings[:-1]):
+    for idx,answer in enumerate(cleaned1[:-1]):
         com.append(cosine_similarity([embeddings[-1]],[embeddings[idx]]))
     com_similarities = []
     for answer in com:
         com_similarities.append(float(answer[0][0]))
 
-    chart_compromiso = pd.DataFrame({
+    chart_compromiso1 = pd.DataFrame({
         'x':index,
         'y':com_similarities
     })
 
-    c = alt.Chart(chart_compromiso).mark_area().encode(
+    c1 = alt.Chart(chart_compromiso1).mark_area().encode(
         x=alt.X('x', title="Semanas"),
         y=alt.Y('y', title="Nivel de compromiso (0-1)"),
         color=alt.value("#3399ff")
@@ -339,7 +338,7 @@ def index():
 
     person_all_text.pop()
 
-    return render_template('test.html', o=o, d=d, u=u, a=a, p=p, c=c, nombre=nombre, apellido=apellido)
+    return render_template('test.html', o1=o1, d1=d1, u1=u1, a1=a1, p1=p1, c1=c1, nombre=nombre, apellido=apellido)
     
 if __name__ == "__main__":
     app.run(port=8080)
