@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analisis Metacognitivo</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+<body>
+    <div class="container">
+        <b class="alumno">Evolución de <br> {{ nombre|safe }} {{ apellido|safe }}</b>
+        <div class="row">
+          <div class="div-item">
+            <p><b>Análisis de los objetivos:</b></p>
+            <div id="objetivos"></div>
+          </div>
+          <div class="div-item" id="wordcloud">
+            <p><b>Word Cloud de los objetivos:</b></p>
+            <img class="item" src="{{url_for('static', filename='person.png')}}" width="350" height="350" >
+          </div>
+        </div>
+        <div class="row">
+          <div class="div-item">
+            <p><b>Sentimiento de dificultad:</b></p>
+            <div id="dificultades"></div>
+          </div>
+          <div class="div-item">
+            <p><b>Sentimiento de utilidad:</b></p>
+            <div id="utilidades"></div>
+          </div>
+        </div>  
+        <div class="row">
+          <div class="div-item">
+            <p><b>Análisis de autonomía:</b></p>
+            <div id="autonomia"></div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="div-item">
+              <p><b>Análisis de participación:</b></p>
+              <div id="participacion"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="div-item">
+              <p><b>Análisis de compromiso:</b></p>
+              <div id="compromiso"></div>
+            </div>
+          </div>
+    </div>
+     
+     
+    <script>
+        const objetivos = {{ o|safe }};
+        vegaEmbed('#objetivos', objetivos);
+        const dificultades = {{ d|safe }};
+        vegaEmbed('#dificultades', dificultades);
+        const utilidades = {{ u|safe }};
+        vegaEmbed('#utilidades', utilidades);
+        const autonomia = {{ a|safe }};
+        vegaEmbed('#autonomia', autonomia);
+        const participacion = {{ p|safe }};
+        vegaEmbed('#participacion', participacion);
+        const compromiso = {{ c|safe }};
+        vegaEmbed('#compromiso', compromiso);
+    </script>
+    <style>
+        .container {
+        display: flex;
+        flex-wrap: wrap;
+        }
+
+
+        .row {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+        width: 100%;
+        }
+
+
+        .div-item {
+        margin-right: 10px;
+        padding: 10px;
+        }
+
+        .alumno {
+          font-family: 'Roboto', sans-serif;
+        }
+
+    </style>
+</body>
+</html>
+
+

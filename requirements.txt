@@ -1,0 +1,16 @@
+gunicorn==19.9.0
+Flask==2.2.3
+pandas==1.2.4
+scikit-learn==0.24.1
+protobuf==3.20.2
+transformers==4.28.1
+sentence-transformers==2.2.2
+stylecloud==0.5.2
+stop-words==2018.7.23
+pysentimiento==0.7.1
+huggingface_hub==0.14.1
+torchvision==0.15.1
+torch==2.0.0
+mysql-connector-python==8.0.33
+scipy==1.10.1
+altair==5.0.1
