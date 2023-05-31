@@ -263,6 +263,7 @@ def index():
     ).to_json()
 
     #AUTONOMIA
+    
     person_all_text.append(autonomia)
     cleanedA = list(map(clean_string, person_all_text))
     embeddings = modelS.encode(cleanedA)
