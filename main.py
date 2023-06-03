@@ -22,7 +22,7 @@ app = Flask(__name__)
 def index():
 
     #RECIBIR DATOS SEGUN EL ALUMNO (email)
-    conn = mysql.connector.connect(host="c47244.sgvps.net", user='umdcgwdtmlpas', password="L4_3b^3@1q[b", database="dbnfg5oyozhtpn") 
+    conn = mysql.connector.connect(host="", user='', password="", database="") 
     cursor = conn.cursor()
     consulta = """
                SELECT sentiments.*, ciclo.especialidad
